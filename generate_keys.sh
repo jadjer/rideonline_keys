@@ -1,13 +1,21 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
-KEY_DIR=$1
+KEYS_DIR=$1
+PRIVATE_KEY_NAME=$2
+PUBLIC_KEY_NAME=$3
 
-if [ ! -d "$KEY_DIR" ]; then
-  mkdir -p "$KEY_DIR";
+if [ ! -d "$KEYS_DIR" ]
+then
+  mkdir -p "$KEYS_DIR"
 fi
 
-PUBLIC_KEY="$KEY_DIR/public_key.pem"
-PRIVATE_KEY="$KEY_DIR/private_key.pem"
+PRIVATE_KEY="$KEYS_DIR/$PRIVATE_KEY_NAME"
+PUBLIC_KEY="$KEYS_DIR/$PUBLIC_KEY_NAME"
 
-openssl genpkey -algorithm RSA -out "$PRIVATE_KEY"
-openssl rsa -pubout -in "$PRIVATE_KEY" -out "$PUBLIC_KEY"
+if [ ! -f "$PRIVATE_KEY" ] || [ ! -f "$PUBLIC_KEY" ]
+then
+  openssl genpkey -algorithm RSA -out "$PRIVATE_KEY"
+  openssl rsa -pubout -in "$PRIVATE_KEY" -out "$PUBLIC_KEY"
+fi
+
+ls -la "$KEYS_DIR"
